@@ -1,17 +1,17 @@
-improt java.swing.JButton;
-improt java.swing.JComboBox;
-improt java.swing.JFrame;
-improt java.swing.JLabel;
-improt java.swing.JOptionPane;
-improt java.swing.JPanel;
+import java.swing.JButton;
+import java.swing.JComboBox;
+import java.swing.JFrame;
+import java.swing.JLabel;
+import java.swing.JOptionPane;
+import java.swing.JPanel;
 
-improt java.awt.FlowLayout;
+import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import java.sql.Connection;
-improt java.sql.DriverManager;
-improt java.sql.ResultSet;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
@@ -23,16 +23,16 @@ public class ScheduleFrame extends JFrame {
     Statement statement = null ;
     ResultSet resultS = null;
 
-    public ScheduleFrame {
-        //creating frame 
+    public ScheduleFrame() {
+        //create frame 
         super("Course Selection");
         setSize(300, 150);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setLayout(null);
+    
 
         JPanel pane = new JPanel(new FlowLayout());
     
-        //creating components
+        //create components
         JLabel label = new JLabel("Select the name of the course you want to see the exam process info:");
         
         //load courses into the dropdown
@@ -41,8 +41,8 @@ public class ScheduleFrame extends JFrame {
         ok = new JButton("OK");
         exit = new JButton("Exit");
 
-         //adding action to the buttons 
-         ok.addActionListener(e - > {
+         //add action to the buttons 
+         ok.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 //add the new page 
@@ -60,20 +60,21 @@ public class ScheduleFrame extends JFrame {
         pane.add(courseDropdown);
         pane.add(ok);
         pane.add(exit);
-        frame.add(pane);
+        this.add(pane);
 
-        frame.setVisible(true);
+        this.setVisible(true);
     }
     
     //jdcb url, username and password of MySQL database
     private static final String url = 
-    "jdcb:mysql://LAPTOP-1VUDT0DH:3306/JAVA";
+    "jdbc:mysql://LAPTOP-1VUDT0DH:3306/JAVA";
  
     private static final String dbUser= "root";
     private static final String dbPassword= "stevasti_LAMPROS!23";
     
     //a method to establish a connection with the database and initializes the connection object
-    public static void chooseCourse(String name) {
+    public JComboBox<String> chooseCourse(String name) {
+        
         JComboBox<String> courseDropdown = new JComboBox<>();
         try {
             connection = DriverManager.getConnection(url);			
@@ -88,13 +89,13 @@ public class ScheduleFrame extends JFrame {
             
             while (resultS.next()) {
                 //adding the available courses to the dropdown
-                courseDropdown.addItem(resultSet.getString("course_name"));
+                courseDropdown.addItem(resultS.getString("course_name"));
             }
 
         } catch(SQLException e) {
             JOptionPane.showMessageDialog(null, "Error :" + e.getMessage());
         } finally {
-            // closing resources
+            // close resources
             try {
                 if (resultS != null) resultS.close();
                 if (statement != null) statement.close();
@@ -106,6 +107,6 @@ public class ScheduleFrame extends JFrame {
         return courseDropdown;
     }
     public static void main (String[] args) {
-
+        new ScheduleFrame();
     }
 }
